@@ -8,9 +8,10 @@ class GameManager
 
 public:
 	void init();
-	void turn(int player);
-
-
+	void game();
+	void turn();
+	bool testVictory();
+	void winner();
 
 	GameManager();
 	virtual ~GameManager();

@@ -9,7 +9,7 @@ class Map;
 class Player;
 class GameManager;
 
-#include "Ship.h";
-#include "Map.h";
-#include "GameManager.h";
-#include "Player.h";
+#include "Ship.h"
+#include "Map.h"
+#include "GameManager.h"
+#include "Player.h"

@@ -1,13 +1,16 @@
 #include "Utils.h"
 
 bool Map::isCoordInGrid(int x, int y){
-	return x >= 0 && x<SIZE_X && y>=0 && y<SIZE_Y;
+	return x >= 0 && x<GRID_SIZE_X && y>=0 && y<GRID_SIZE_Y;
 }
 
 bool Map::addShip(Ship& ship, int x, int y){
 	//Test if ship fit
-	//store it in map
-	//store coordinate in ship
+	if (canShipFit(ship, x, y)) {
+		//store it in map
+		placeShip(ship, x, y);
+		return true;
+	}
 	return false;
 }
 
@@ -30,9 +33,7 @@ bool Map::canShipFit(Ship& ship, int x, int y)
 			)return false;
 	}
 
-	//PlaceBoat
-	placeShip(ship, x, y);
-	return false;
+	return true;
 }
 
 bool Map::isShipHere(int x, int y) {
@@ -64,7 +65,7 @@ bool Map::shoot(int x, int y)
 }
 Map::Map(){
 	for (int i = 0; i < 10; i++) {
-		for (int j; j < 10; j++) {
+		for (int j=0; j < 10; j++) {
 			grille[i][j] = 0;
 		}
 	}
