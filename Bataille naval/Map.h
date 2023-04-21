@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 
 class Map{
@@ -7,6 +8,7 @@ private:
 	int grille[GRID_SIZE_X][GRID_SIZE_Y] = {};	//EMPTY 0 / SHIP 1 / HIT 2 / 3 MISS
 public:
 
+	sf::VertexArray drawGrid(sf::RenderWindow* window);
 	//TODO grille getter
 	//TODO grille slot getter
 

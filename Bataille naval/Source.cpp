@@ -7,6 +7,9 @@
 #endif
 
 #include "Utils.h";
+#include <iostream>
+
+//compile pr 
 
 int main()
 {
@@ -16,27 +19,34 @@ int main()
 #endif
 
 
-    /*
     GameManager gm;
-    gm.game();
-    */
+    gm.init();
+    GameInput input;
 
+    Map map;
 
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
-    while (window.isOpen())
-    {
+    sf::RenderWindow window(sf::VideoMode(WINDOWSIZE_X, WINDOWSIZE_Y), "Bataille navale");
+    sf::VertexArray grid = map.drawGrid(&window);
+   
+    
+    while (window.isOpen()){
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+            input.windowInput(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
+            gm.game(input);
+        }
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+            input.swapClick();
+        }
 
         window.clear();
-        window.draw(shape);
+        window.draw(grid);
         window.display();
     }
 

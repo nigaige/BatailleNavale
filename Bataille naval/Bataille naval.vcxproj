@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameInput.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameInput.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />

@@ -12,7 +12,7 @@ public:
 	Map& grille() { return *grille_; }
 
 
-	void placeShip();
+	bool placeShip(int shipIndex, int x, int y, bool orientation);
 	Player();
 	virtual ~Player();
 };

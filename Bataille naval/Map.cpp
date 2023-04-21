@@ -1,5 +1,31 @@
 #include "Utils.h"
 
+sf::VertexArray Map::drawGrid(sf::RenderWindow* window)
+{
+	int numLines = GRID_SIZE_X + GRID_SIZE_Y - 2;
+	sf::VertexArray grid(sf::Lines, 2 * (numLines));
+	window->setView(window->getDefaultView());
+	auto size = window->getView().getSize();
+	float rowH = size.y / GRID_SIZE_Y;
+	float colW = size.x / GRID_SIZE_X;
+	// row separators
+	for (int i = 0; i < GRID_SIZE_X - 1; i++) {
+		int r = i + 1;
+		float rowY = rowH * r;
+		grid[i * 2].position = { 0, rowY };
+		grid[i * 2 + 1].position = { size.x, rowY };
+	}
+	// column separators
+	for (int i = GRID_SIZE_Y - 1; i < numLines; i++) {
+		int c = i - GRID_SIZE_Y + 2;
+		float colX = colW * c;
+		grid[i * 2].position = { colX, 0 };
+		grid[i * 2 + 1].position = { colX, size.y };
+	}
+
+	return grid;
+}
+
 bool Map::isCoordInGrid(int x, int y){
 	return x >= 0 && x<GRID_SIZE_X && y>=0 && y<GRID_SIZE_Y;
 }

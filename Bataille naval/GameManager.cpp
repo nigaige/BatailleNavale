@@ -1,33 +1,60 @@
 #include "Utils.h"
 
 void GameManager::init(){
+	gameState = GAMEINIT;
 	turnCount = 0;
 	currentPlayer = 0;
+	currentShip = 0;
 	delete player[0];//In case the function is called again to prevent memory leak
 	delete player[1];
 	player[0] = new Player();
 	player[1] = new Player();
-	player[0]->placeShip();
-	player[1]->placeShip();
-
-
 }
 
 
-void GameManager::game(){
-	init();
-	while (testVictory()) {
-		turn();
+
+
+
+void GameManager::game(GameInput& input){
+	switch (gameState){
+	case GAMEINIT:
+		initShip(input);
+		break;
+
+	case GAMERUNNING:
+		turn(input);
+		if (testVictory())
+			gameState = GAMEFINISH;
+		break;
+
+	case GAMEFINISH:
+		winner();
+		break;
+
+	default:
+		break;
 	}
-	//currentPlayer is loser
-	winner();
 }
 
-void GameManager::turn(){
-	//TODO get input
-	//TODO manage waiting for input when in remote	--
-	int inputX = 0, inputY = 0;
-	if (player[currentPlayer]->grille().shoot(inputX, inputY)) {
+
+void GameManager::initShip(GameInput& input){
+	if(
+		player[currentPlayer]->
+		placeShip(currentShip,input.x(),input.y(), input.rightClick())
+	){
+		currentShip++;
+		if (currentShip == 5){
+			currentPlayer++;
+			currentShip = 0;
+		}
+	}
+	if (currentPlayer == 2) {
+		gameState = GAMERUNNING;
+	}
+}
+
+void GameManager::turn(GameInput& input){
+	if (player[currentPlayer]->grille().shoot(input.x(), input.y())) {
 		player[(currentPlayer == 1) ? 0 : 1]		//otherPlayer
 			->HP(player[currentPlayer]->HP() - 1);	//reduce their hp
 	};
@@ -52,8 +79,7 @@ GameManager::GameManager(){
 	currentPlayer = 0;
 }
 
-GameManager::~GameManager()
-{
+GameManager::~GameManager(){
 	delete player[0];
 	delete player[1];
 }
