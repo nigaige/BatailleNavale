@@ -9,6 +9,9 @@
 #include "Utils.h";
 #include <iostream>
 
+#include <winsock2.h>
+#include <string.h>
+
 //compile pr 
 
 int main()
