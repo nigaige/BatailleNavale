@@ -75,6 +75,7 @@ int __cdecl main(void)
     freeaddrinfo(result);
 
     iResult = listen(ListenSocket, SOMAXCONN);
+
     if (iResult == SOCKET_ERROR) {
         printf("listen failed with error: %d\n", WSAGetLastError());
         closesocket(ListenSocket);

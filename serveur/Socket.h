@@ -22,9 +22,14 @@ class Socket
 
 public:
     bool init();
-    bool open();
-    bool sendBuffer(const char* buffer);
-    std::string receiveBuffer();
+    bool startListening();
+
+    void openClientSocket();
+    void closeClientSocket();
+
+    void recieveClientData();
+    void sendClientData();
+
 
     void close();
 
