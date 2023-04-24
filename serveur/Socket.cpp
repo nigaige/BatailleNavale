@@ -1,8 +1,5 @@
 #include "Utils.h"
 
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-
 bool Socket::init()
 {
     ListenSocket = INVALID_SOCKET;
@@ -24,6 +21,7 @@ bool Socket::init()
 
 	return true;
 }
+
 
 bool Socket::startListening()
 {
@@ -54,6 +52,7 @@ bool Socket::startListening()
         WSACleanup();
         return false;
     }
+
     freeaddrinfo(result);
 
 
@@ -65,3 +64,11 @@ bool Socket::startListening()
     return true;
 }
 
+
+void Socket::openClientSocket()
+{
+}
+
+void Socket::closeClientSocket()
+{
+}

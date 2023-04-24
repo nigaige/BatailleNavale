@@ -1,22 +1,45 @@
-#undef UNICODE
-
-#define WIN32_LEAN_AND_MEAN
-
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-// Need to link with Ws2_32.lib
-#pragma comment (lib, "Ws2_32.lib")
-// #pragma comment (lib, "Mswsock.lib")
-
+﻿
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "80"
+#define WM_SOCKET WM_USER +1 
 
-int __cdecl main(void)
+#define _CRT_SECURE_NO_WARNINGS
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
+#include "Utils.h"
+// the WindowProc function prototype
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+
+int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
+    FILE* fpstdin = stdin, * fpstdout = stdout, * fpstderr = stderr;
+    AllocConsole();
+    freopen_s(&fpstdout, "CONOUT$", "w", stdout);
+    freopen_s(&fpstderr, "CONOUT$", "w", stderr);
+    freopen_s(&fpstdin, "CONIN$", "r", stdin);
+
+
+    HINSTANCE& hInstance_ = hInstance;
+    HWND hwnd_ = NULL;
+    WNDCLASSEX wc_ = { 0 };
+    ZeroMemory(&wc_, sizeof(WNDCLASSEX));
+
+
+    // fill in the struct with the needed information
+    wc_.cbSize = sizeof(WNDCLASSEX);
+    wc_.style = CS_HREDRAW | CS_VREDRAW;
+    wc_.lpfnWndProc = WindowProc;
+    wc_.hInstance = hInstance_;
+    wc_.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc_.lpszClassName = "WindowClass1";
+
+    // register the window class
+    RegisterClassEx(&wc_);
+
+    hwnd_ = CreateWindowEx(0, "WindowClass1", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+
     WSADATA wsaData;
     int iResult;
 
@@ -62,6 +85,8 @@ int __cdecl main(void)
         return 1;
     }
 
+    auto rc = WSAAsyncSelect(ListenSocket, hwnd_, WM_SOCKET, FD_ACCEPT | FD_CLOSE);
+
     // Setup the TCP listening socket
     iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
@@ -71,10 +96,35 @@ int __cdecl main(void)
         WSACleanup();
         return 1;
     }
-
     freeaddrinfo(result);
 
+    //auto rc = WSAAsyncSelect(ListenSocket, hwnd_, WM_SOCKET, FD_ACCEPT | FD_CLOSE);
+    //auto rc = WSAEventSelect(ListenSocket, CreateEvent(NULL, TRUE, FALSE, NULL), FD_ALL_EVENTS);
+
+     // filet de connection
     iResult = listen(ListenSocket, SOMAXCONN);
+    MSG msg;
+
+    while (1) {
+        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
+            if (msg.message == WM_QUIT)
+                return false;
+            // Traduisez le message et envoyez-le � WindowProc() 
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+
+        }
+
+
+
+
+
+    }
+
+
+/*
+
 
     if (iResult == SOCKET_ERROR) {
         printf("listen failed with error: %d\n", WSAGetLastError());
@@ -82,6 +132,7 @@ int __cdecl main(void)
         WSACleanup();
         return 1;
     }
+
 
     // Accept a client socket
     ClientSocket = accept(ListenSocket, NULL, NULL);
@@ -135,6 +186,86 @@ int __cdecl main(void)
     // cleanup
     closesocket(ClientSocket);
     WSACleanup();
-
+*/
     return 0;
+}
+
+
+bool ProcessMessage() 
+{
+    MSG msg;
+
+    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+        if (msg.message == WM_QUIT)
+            return false;
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return true;
+}
+
+
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    printf("truc\n");
+    
+    // sort through and find what code to run for the message given
+    switch (message)
+    {
+    case WM_CLOSE:
+        DestroyWindow(hWnd);
+        return 0;
+        // this message is read when the window is closed
+    case WM_DESTROY:
+    {
+        // close the application entirely
+        PostQuitMessage(0);
+        return 0;
+    }
+    case WM_SOCKET:
+        switch (WSAGETSELECTEVENT(lParam)) {
+        case FD_ACCEPT:
+            printf("FD_ACCEPT");
+
+            // Accept an incoming connection
+
+           // Accept = accept(wParam, NULL, NULL);
+
+            // Prepare accepted socket for read, write, and close notification
+
+           // WSAAsyncSelect(Accept, hDlg, WM_SOCKET, FD_READ │ FD_WRITE │ FD_CLOSE);
+
+            break;
+
+        case FD_READ:
+            printf("FD_READ");
+
+            // Receive data from the socket in wParam
+
+            break;
+
+        case FD_WRITE:
+            printf("FD_WRITE");
+
+            // The socket in wParam is ready for sending data
+
+            break;
+
+        case FD_CLOSE:
+            printf("FD_CLOSE");
+
+            // The connection is now closed
+
+           // closesocket((SOCKET)wParam);
+
+            break;
+        }
+
+
+    break;
+    }
+
+    // Handle any messages the switch statement didn't
+    return DefWindowProc(hWnd, message, wParam, lParam);
 }
