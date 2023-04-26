@@ -36,7 +36,7 @@
     <ClInclude Include="State.h">
       <Filter>Game\State</Filter>
     </ClInclude>
-    <ClInclude Include="WaitPlayer.h">
+    <ClInclude Include="WaitPlayerState.h">
       <Filter>Game\State</Filter>
     </ClInclude>
     <ClInclude Include="GameUtils.h">
@@ -44,6 +44,9 @@
     </ClInclude>
     <ClInclude Include="StateMachine.h">
       <Filter>Game\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="StartGameState.h">
+      <Filter>Game\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,11 +62,14 @@
     <ClCompile Include="State.cpp">
       <Filter>Game\State</Filter>
     </ClCompile>
-    <ClCompile Include="WaitPlayer.cpp">
+    <ClCompile Include="WaitPlayerState.cpp">
       <Filter>Game\State</Filter>
     </ClCompile>
     <ClCompile Include="StateMachine.cpp">
       <Filter>Game\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="StartGameState.cpp">
+      <Filter>Game\State</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

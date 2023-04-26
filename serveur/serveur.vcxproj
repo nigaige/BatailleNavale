@@ -130,18 +130,20 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="StartGameState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Utils.h" />
-    <ClInclude Include="WaitPlayer.h" />
+    <ClInclude Include="WaitPlayerState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="StartGameState.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
-    <ClCompile Include="WaitPlayer.cpp" />
+    <ClCompile Include="WaitPlayerState.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
