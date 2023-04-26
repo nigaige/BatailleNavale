@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{0fa64d92-a15e-4960-9bd0-1ad01e089a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State">
+      <UniqueIdentifier>{96bca926-a6da-4f9b-b740-160317198535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StateMachine">
+      <UniqueIdentifier>{4835aa19-6634-47c0-bb0f-6e1b19626e01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -21,6 +30,21 @@
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="WaitPlayer.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUtils.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>Game\StateMachine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -28,6 +52,18 @@
     </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="WaitPlayer.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>Game\StateMachine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
