@@ -1,16 +1,4 @@
-#include <SFML/Graphics.hpp>
-
-
-#ifdef _DEBUG
-#include <crtdbg.h>
-#include <Windows.h>
-#endif
-
-#include "Utils.h";
-#include <iostream>
-
-#include <winsock2.h>
-#include <string.h>
+#include "Utils.h"
 
 //compile pr 
 
@@ -21,7 +9,6 @@ int main()
     _CrtMemCheckpoint(&memStateInit);
 #endif
 
-
     GameManager gm;
     gm.init();
     GameInput input;
@@ -30,22 +17,23 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(WINDOWSIZE_X, WINDOWSIZE_Y), "Bataille navale");
     sf::VertexArray grid = map.drawGrid(&window);
-   
+    window.setKeyRepeatEnabled(false);
     
     while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed)
                 window.close();
-        }
-        
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-            input.windowInput(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
-            gm.game(input);
-        }
+            else if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    input.windowInput(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+                    gm.game(input);
+                }
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
-            input.swapClick();
+                else if (event.mouseButton.button == sf::Mouse::Right) {
+                    input.swapClick();
+                }
+            }
         }
 
         window.clear();
