@@ -18,6 +18,11 @@ void GameManager::Update()
 
 void GameManager::ProcessMessage(string msg)
 {
+	switch (msg)
+	{
+	default:
+		break;
+	}
 }
 
 
