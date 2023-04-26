@@ -219,12 +219,8 @@ string Server::recieveClientData(int socketIndex)
             printf("Bytes received: %d\n", iResult);
         else if (iResult == 0)
             printf("Connection closed\n");
-        else {
-            if (WSAGetLastError() == WSAEWOULDBLOCK)break;  //Nothing left to read
+        else
             printf("recv failed with error: %d\n", WSAGetLastError());
-        }
-            
-           
         //printf(recvbuf);
         all += recvbuf;
     } while (iResult > 0);
@@ -273,11 +269,9 @@ LRESULT Server::realWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
         case FD_READ:
             //  Recieved data to be read on the wParam socket
             printf("FD_READ\n");
-
             sockIndex = findSocket(wParam);
             data = recieveClientData(sockIndex);
             std::cout<<data;
-            socketEvent_(data);
             break;
 
         case FD_WRITE:
@@ -313,13 +307,4 @@ bool Server::ProcessMessage()
         DispatchMessage(&msg);
     }
     return true;
-}
-
-void Server::closeServer(){
-    while (ClientSocket.size() > 0) {
-        closeClientSocket(ClientSocket[0]);
-    }
-    closesocket(ListenSocket);
-    WSACleanup();
-
 }
