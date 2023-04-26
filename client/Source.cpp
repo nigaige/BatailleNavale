@@ -12,7 +12,7 @@ int __cdecl main(int argc, char** argv){
 	cl.open();
 	cl.sendBuffer(b);
 	std::string msgRec = cl.receiveBuffer();
-	cl.close();
+	//cl.close();
 	
 	std::cout<<msgRec;
 	std::string pause;
