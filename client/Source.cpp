@@ -5,7 +5,7 @@
 
 int __cdecl main(int argc, char** argv){
 
-	const char* b = "GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n";
+	const char* b = "MSG";
 
 	Client cl;
 	cl.init("localhost");
