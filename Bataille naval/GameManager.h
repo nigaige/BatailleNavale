@@ -7,6 +7,7 @@
 class GameManager
 {
 	Player* player[2];
+	Client* client;
 	int turnCount;
 	int currentPlayer;
 	int currentShip;

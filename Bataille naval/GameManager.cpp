@@ -9,6 +9,9 @@ void GameManager::init(){
 	delete player[1];
 	player[0] = new Player();
 	player[1] = new Player();
+	client = new Client();
+	client->init("localhost");
+	client->open();
 }
 
 
@@ -16,6 +19,7 @@ void GameManager::init(){
 
 
 void GameManager::game(GameInput& input){
+	gameState = GAMERUNNING;
 	switch (gameState){
 	case GAMEINIT:
 		initShip(input);
@@ -54,10 +58,16 @@ void GameManager::initShip(GameInput& input){
 }
 
 void GameManager::turn(GameInput& input){
+	std::string temp = "S : " + std::to_string(input.x()) + ", " + std::to_string(input.y()) + "\n";
+	const char* shootBuffer = temp.c_str();
+	client->sendBuffer(shootBuffer);
 	if (player[currentPlayer]->grille().shoot(input.x(), input.y())) {
 		player[(currentPlayer == 1) ? 0 : 1]		//otherPlayer
 			->HP(player[currentPlayer]->HP() - 1);	//reduce their hp
 	};
+	temp = "R : " + std::to_string(player[currentPlayer]->grille().shoot(input.x(), input.y())) + "\n";
+	const char* resultBuffer = temp.c_str();
+	client->sendBuffer(resultBuffer);
 	turnCount++;
 	currentPlayer = (currentPlayer == 1) ? 0 : 1;	//Swap player
 }
