@@ -69,7 +69,12 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 */
 
 
-Server::Server(_In_ HINSTANCE hInstance):hInstance_(hInstance){}
+Server::Server(_In_ HINSTANCE hInstance):hInstance_(hInstance){
+}
+
+Server::~Server()
+{
+}
 
 bool Server::init()
 {
@@ -114,9 +119,6 @@ void Server::createGhostWindow(){
     RegisterClassEx(&wc_);
 
     hwnd_ = CreateWindowEx(0, "WindowClass1", 0, 0, 0, 0, 0, 0, 0, 0, hInstance_, NULL);
-
-    SOCKET ListenSocket = INVALID_SOCKET;
-    SOCKET ClientSocket = INVALID_SOCKET;
 
     SetWindowLongPtr(hwnd_, GWLP_USERDATA, LONG_PTR(this));
 
