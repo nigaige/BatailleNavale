@@ -1,74 +1,6 @@
 ﻿#include "Utils.h"
 
 
-/*
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    printf("truc\n");
-
-    // sort through and find what code to run for the message given
-    switch (message)
-    {
-    case WM_CLOSE:
-        DestroyWindow(hWnd);
-        return 0;
-        // this message is read when the window is closed
-    case WM_DESTROY:
-    {
-        // close the application entirely
-        PostQuitMessage(0);
-        return 0;
-    }
-    case WM_SOCKET:
-        switch (WSAGETSELECTEVENT(lParam)) {
-        case FD_ACCEPT:
-            printf("FD_ACCEPT");
-
-            // Accept an incoming connection
-
-            accept(wParam, NULL, NULL);
-
-            // Prepare accepted socket for read, write, and close notification
-
-           // WSAAsyncSelect(Accept, hDlg, WM_SOCKET, FD_READ │ FD_WRITE │ FD_CLOSE);
-
-            break;
-
-        case FD_READ:
-            printf("FD_READ");
-
-            // Receive data from the socket in wParam
-
-            break;
-
-        case FD_WRITE:
-            printf("FD_WRITE");
-
-            // The socket in wParam is ready for sending data
-
-            break;
-
-        case FD_CLOSE:
-            printf("FD_CLOSE");
-
-            // The connection is now closed
-
-           // closesocket((SOCKET)wParam);
-
-            break;
-        }
-
-
-        break;
-    }
-
-    // Handle any messages the switch statement didn't
-    return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-*/
-
-
 Server::Server(_In_ HINSTANCE hInstance):hInstance_(hInstance){
 }
 
@@ -162,7 +94,7 @@ void Server::createListening(){
         //THROW
     }
 
-    auto rc = WSAAsyncSelect(ListenSocket, hwnd_, WM_SOCKET, FD_ACCEPT | FD_CLOSE);
+   WSAAsyncSelect(ListenSocket, hwnd_, WM_SOCKET, FD_ACCEPT | FD_CLOSE);
 
     // Setup the TCP listening socket
     iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
@@ -176,7 +108,7 @@ void Server::createListening(){
     }
     freeaddrinfo(result);
 
-    iResult = listen(ListenSocket, SOMAXCONN);
+    listen(ListenSocket, SOMAXCONN);
 
 
 }

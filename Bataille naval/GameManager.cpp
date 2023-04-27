@@ -12,22 +12,50 @@ void GameManager::init(){
 	client = new Client();
 	client->init("localhost");
 	client->open();
+
+	input = new GameInput();
 }
 
 
 
 
 
-void GameManager::game(GameInput& input){
+void GameManager::readInput(sf::RenderWindow *window){
+
+	input->mousePos(window);
+	input->checkCurrentGrid();
+	input->windowInput();
+	
+
+	while (window->pollEvent(event)) {
+		if (event.type == sf::Event::Closed)
+			window->close();
+		else if (event.type == sf::Event::MouseButtonReleased) {
+			if (event.mouseButton.button == sf::Mouse::Left) {
+				input->leftClick(true);
+			}
+			else if (event.mouseButton.button == sf::Mouse::Right) {
+				input->swapClick();
+			}
+		}
+	}
+}
+
+void GameManager::game(){
 	switch (gameState){
 	case GAMEINIT:
-		initShip(input);
+		initShip();
 		break;
-
-	case GAMERUNNING:
-		turn(input);
+	case GAMEWAITSTART:
+		readWaitStart();
+		break;
+	case GAMERUNNINGISTURN:
+		sendShot();
 		if (testVictory())
 			gameState = GAMEFINISH;
+		break;
+	case GAMERUNNINGNOTTURN:
+		recieveShoot();
 		break;
 
 	case GAMEFINISH:
@@ -37,27 +65,46 @@ void GameManager::game(GameInput& input){
 	default:
 		break;
 	}
+
+	
+
+}
+
+void GameManager::readWaitStart()
+{
 }
 
 
-void GameManager::initShip(GameInput& input){
-	std::cout << "hey" << std::endl;
-	if(
-		player[currentPlayer]->
-		placeShip(currentShip,input.x(),input.y(), input.rightClick())
-	){
-		currentShip++;
-		if (currentShip == 5){
-			currentPlayer++;
-			currentShip = 0;
+void GameManager::initShip(){
+	if (input->leftClick() && input->currentGrid() == 1) {
+		input->leftClick(false);
+		if (
+			player[currentPlayer]->
+			placeShip(currentShip, input->x(), input->y(), input->rightClick())
+			) {
+			printf("boat placed");
+			currentShip++;
+			if (currentShip == 5) {
+				gameState = GAMEWAITSTART;
+			}
 		}
 	}
-	if (currentPlayer == 2) {
-		gameState = GAMERUNNING;
-	}
 }
 
-void GameManager::turn(GameInput& input){
+void GameManager::readSocketQueu()
+{
+}
+
+void GameManager::sendShot()
+{
+}
+
+void GameManager::recieveShoot()
+{
+}
+
+void GameManager::turn(){
+	/*
 	std::string temp = "S : " + std::to_string(input.x()) + ", " + std::to_string(input.y()) + "\n";
 	const char* shootBuffer = temp.c_str();
 	client->sendBuffer(shootBuffer);
@@ -69,7 +116,7 @@ void GameManager::turn(GameInput& input){
 	const char* resultBuffer = temp.c_str();
 	client->sendBuffer(resultBuffer);
 	turnCount++;
-	currentPlayer = (currentPlayer == 1) ? 0 : 1;	//Swap player
+	currentPlayer = (currentPlayer == 1) ? 0 : 1;	//Swap player*/
 }
 
 
@@ -90,8 +137,8 @@ void GameManager::drawGame(sf::RenderWindow& window){
 
 
 	window.clear();
-	player[0]->grille().drawGrid(window, PLAYER_1_GRID_POS);
-	player[1]->grille().drawGrid(window, PLAYER_2_GRID_POS);
+	player[0]->grille().drawGrid(window, PLAYER_1_GRID_POSX, PLAYER_1_GRID_POSY);
+	player[1]->grille().drawGrid(window, PLAYER_2_GRID_POSX, PLAYER_2_GRID_POSY);
 
 	if (gameState == GAMEINIT) {
 		drawShipPreview();
