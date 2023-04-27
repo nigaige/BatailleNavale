@@ -5,6 +5,9 @@ StateMachine::StateMachine(GameManager* gm)
 	gameManager_ = gm;
 	initState();
 	CurrentState(StateEnum::Null);
+
+	indexWinner_ = -1;
+
 }
 
 StateMachine::~StateMachine() 
@@ -64,4 +67,12 @@ State* StateMachine::GetState(StateEnum val)
 	}
 	cout << "State not found ! " << endl;
 	return nullptr;
+}
+
+
+void StateMachine::Finish(int indexWinner)
+{
+	indexWinner_ = indexWinner;
+	CurrentState(StateEnum::EndGame);
+
 }

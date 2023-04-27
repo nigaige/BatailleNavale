@@ -12,7 +12,6 @@ class GameManager
 
 public:
 
-
 	GameManager(Server* serv);
 	virtual ~GameManager();
 
@@ -20,6 +19,7 @@ public:
 	Server* GetServer() { return server_; }
 
 	void Update(string msg, int indexSock);
+
 
 };
 

@@ -12,11 +12,13 @@ void WaitPlayerState::Update()
 
 void WaitPlayerState::End()
 {
-	char msg = 'P:1';
+	const char* msg = "P:1";
+	char* chr = const_cast<char*>(msg);
+
 
 	for (int i = 0; i < stateMachine_->GetGameManager()->GetServer()->GetNBClientConnect(); i++)
 	{
-		stateMachine_->GetGameManager()->GetServer()->sendClientData(i, &msg);
+		stateMachine_->GetGameManager()->GetServer()->sendClientData(i, chr);
 	}
 
 }

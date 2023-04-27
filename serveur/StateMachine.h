@@ -15,6 +15,8 @@ class StateMachine
 	vector<State*> stateList_;
 	GameManager* gameManager_;
 
+	int indexWinner_;
+
 
 public:
 	StateMachine(GameManager* gm = nullptr);
@@ -25,7 +27,12 @@ public:
 
 	GameManager* GetGameManager() { return gameManager_; }
 
+	int IndexWinner() { return indexWinner_; }
+
 	void Update(string msg = "", int indexSock = -1);
+
+	void Finish(int indexWinner);
+
 
 private:
 	void initState();
