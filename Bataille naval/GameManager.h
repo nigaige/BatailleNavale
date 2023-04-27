@@ -4,8 +4,9 @@
 #define GAMEWAITSTART 1
 #define GAMEWAITTURN 2
 #define GAMERUNNINGISTURN 3
-#define GAMERUNNINGNOTTURN 4
-#define GAMEFINISH 5
+#define GAMESHOTSENT 4
+#define GAMERUNNINGNOTTURN 5
+#define GAMEFINISH 6
 
 class GameManager
 {
@@ -30,11 +31,10 @@ public:
 	void game();
 	void readWaitStart();
 	void initShip();
-	void readSocketQueu();
 	void sendShot();
 	void recieveShoot();
-
-
+	void waitShootResult();
+	void waitPlayerNumber();
 
 
 	void drawGame(sf::RenderWindow& window);
