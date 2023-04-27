@@ -279,13 +279,12 @@ LRESULT Server::realWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             sockIndex = findSocket(wParam);
             data = recieveClientData(sockIndex);
             std::cout<<data;
-            socketEvent_(data);
+            socketEvent_(data, sockIndex);
             break;
 
         case FD_WRITE:
             // The socket in wParam is ready for sending data
             printf("FD_WRITE\n");
-
             break;
 
         case FD_CLOSE:

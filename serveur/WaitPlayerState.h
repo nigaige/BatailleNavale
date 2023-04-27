@@ -2,6 +2,11 @@
 class WaitPlayerState : public State
 {
 public:
-	WaitPlayerState(StateEnum val);
+	WaitPlayerState(StateEnum val, StateMachine* Stm = nullptr);
+
+	virtual void Update() override;
+	virtual void End() override;
+
+	bool CheckIfGood();
 };
 

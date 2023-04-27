@@ -3,18 +3,23 @@ class GameManager
 {
 	StateMachine* stateMachine_;
 
+	vector<SOCKET> ClientSocket_;
+	Server* server_;
+
 	//TODO faire un process message pour traiter les messages du jeu
 
 
 
 public:
-	GameManager();
+
+
+	GameManager(Server* serv);
 	virtual ~GameManager();
 
 	StateMachine* GetStateMachine() { return stateMachine_; };
+	Server* GetServer() { return server_; }
 
-	void Update();
+	void Update(string msg, int indexSock);
 
-	void ProcessMessage(string msg);
 };
 

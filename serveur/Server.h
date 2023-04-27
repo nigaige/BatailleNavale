@@ -26,7 +26,7 @@ class Server
     int recvbuflen = DEFAULT_BUFLEN;
 
     int maxClient_ = 2;
-    void (*socketEvent_)(string msg);
+    void (*socketEvent_)(string msg, int indexSock);
 
 
 
@@ -35,7 +35,9 @@ public:
     virtual ~Server();
     void maxClient(int maxClient) { maxClient_ = maxClient; }
     int maxClient() { return maxClient_; }
-    void socketEvent(void(*f)(string msg)) { socketEvent_ = f; }
+    void socketEvent(void(*f)(string msg, int indexSock)) { socketEvent_ = f; }
+
+    int GetNBClientConnect() { return ClientSocket.size(); }
 
 
     bool init();

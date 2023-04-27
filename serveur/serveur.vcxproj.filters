@@ -48,6 +48,12 @@
     <ClInclude Include="StartGameState.h">
       <Filter>Game\State</Filter>
     </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="EndGameState.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -69,6 +75,12 @@
       <Filter>Game\StateMachine</Filter>
     </ClCompile>
     <ClCompile Include="StartGameState.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="EndGameState.cpp">
       <Filter>Game\State</Filter>
     </ClCompile>
   </ItemGroup>

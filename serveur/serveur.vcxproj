@@ -127,7 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EndGameState.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="StartGameState.h" />
@@ -137,7 +139,9 @@
     <ClInclude Include="WaitPlayerState.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StartGameState.cpp" />

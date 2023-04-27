@@ -1,28 +1,17 @@
 #include "GameUtils.h"
 
-GameManager::GameManager() 
+GameManager::GameManager(Server* serv)
 {
-	stateMachine_ = new StateMachine();
-
+	server_ = serv;
+	stateMachine_ = new StateMachine(this);
 }
 
 GameManager::~GameManager() 
 {
-	stateMachine_ = nullptr;
+	delete stateMachine_;
 }
 
-void GameManager::Update()
+void GameManager::Update(string msg, int indexSock)
 {
-	stateMachine_->Update();
+	stateMachine_->Update(msg, indexSock);
 }
-
-void GameManager::ProcessMessage(string msg)
-{
-	switch (msg)
-	{
-	default:
-		break;
-	}
-}
-
-

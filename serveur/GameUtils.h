@@ -8,10 +8,14 @@ using namespace std;
 
 enum StateEnum;
 
+class Server;
+
 //include states
 class State;
 class WaitPlayerState;
 class StartGameState;
+class GameState;
+class EndGameState;
 
 
 //include game managers
@@ -20,10 +24,14 @@ class GameManager;
 
 //==============================//
 
+#include "Server.h"
+
 //include states
 #include "State.h"
 #include "WaitPlayerState.h"
 #include "StartGameState.h"
+#include "GameState.h"
+#include "EndGameState.h"
 
 
 

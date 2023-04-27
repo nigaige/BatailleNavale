@@ -1,7 +1,8 @@
 #include "GameUtils.h"
 
-StateMachine::StateMachine() 
+StateMachine::StateMachine(GameManager* gm)
 {
+	gameManager_ = gm;
 	initState();
 	CurrentState(StateEnum::Null);
 }
@@ -32,16 +33,24 @@ bool StateMachine::CurrentState(StateEnum t_stateEnum)
 	return true;
 }
 
-void StateMachine::Update()
+void StateMachine::Update(string msg, int indexSock)
 {
-	GetState(currentState_)->Update();
+	if (msg == "")
+	{
+		GetState(currentState_)->Update();
+		return;
+	}
+
+	GetState(currentState_)->Update(msg, indexSock);
 }
 
 void StateMachine::initState() 
 {
 	stateList_.push_back(new State(StateEnum::Null));
-	stateList_.push_back(new WaitPlayerState(StateEnum::WaitPlayer));
-	stateList_.push_back(new StartGameState(StateEnum::StartGame));
+	stateList_.push_back(new WaitPlayerState(StateEnum::WaitPlayer, this));
+	stateList_.push_back(new StartGameState(StateEnum::StartGame, this));
+	stateList_.push_back(new StartGameState(StateEnum::Game, this));
+	stateList_.push_back(new StartGameState(StateEnum::EndGame, this));
 }
 
 State* StateMachine::GetState(StateEnum val)
