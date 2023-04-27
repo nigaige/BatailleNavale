@@ -11,7 +11,6 @@ int main()
 
     GameManager gm;
     gm.init();
-    GameInput input;
 
     Map map;
 
@@ -19,21 +18,9 @@ int main()
     window.setKeyRepeatEnabled(false);
     
     while (window.isOpen()){
-        sf::Event event;
-        while (window.pollEvent(event)){
-            if (event.type == sf::Event::Closed)
-                window.close();
-            else if (event.type == sf::Event::MouseButtonReleased) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    input.windowInput(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, PLAYER_1_GRID_POS);
-                    gm.game(input);
-                }
 
-                else if (event.mouseButton.button == sf::Mouse::Right) {
-                    input.swapClick();
-                }
-            }
-        }
+        gm.readInput(&window);
+        gm.game();
         gm.drawGame(window);
     }
 

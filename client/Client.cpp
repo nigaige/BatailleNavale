@@ -3,6 +3,7 @@
 #include "Utils.h"
 
 using namespace std;
+#define WM_SOCKET WM_USER +1 
 
 
 Client::Client()
@@ -29,6 +30,7 @@ bool Client::init(PCSTR addr){
 
 	addr_ = addr;
 
+	//WSAAsyncSelect(ConnectSocket, hwnd, WM_SOCKET, FD_ACCEPT | FD_CLOSE);
 
 
 	return true;
