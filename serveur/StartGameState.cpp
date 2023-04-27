@@ -16,7 +16,7 @@ void StartGameState::Update(string msg, int indexSock)
 
 	if (CheckIfReady(msg, indexSock))
 	{
-		stateMachine_->CurrentState(StateEnum::StartGame);
+		stateMachine_->CurrentState(StateEnum::Game);
 	}
 
 }
@@ -36,9 +36,6 @@ void StartGameState::End()
 
 bool StartGameState::CheckIfReady(string msg, int indexSock)
 {
-	if (readyIndexSocket_.size() > 0 || find(readyIndexSocket_.begin(), readyIndexSocket_.end(), indexSock) != readyIndexSocket_.end())
-		return false;
-
 	string delimiter = ":";
 	string MsgType = msg.substr(0, msg.find(delimiter));
 
@@ -48,7 +45,8 @@ bool StartGameState::CheckIfReady(string msg, int indexSock)
 	msg.erase(0, msg.find(delimiter) + delimiter.length());
 
 	delimiter = ",";
-	if (msg.find(delimiter) == -1)
+	int a = msg.find(delimiter);
+	if (msg.find(delimiter) != -1)
 		return false;
 
 	if (msg == "0")
