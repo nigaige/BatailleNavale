@@ -16,6 +16,7 @@ private:
 	struct addrinfo* result = NULL,
 		* ptr = NULL,
 		hints;
+	const struct timeval tv = { 1,0 };
 
 public:
 	Client();
