@@ -144,6 +144,8 @@ void GameManager::drawGame(sf::RenderWindow& window){
 		drawShipPreview(window);
 	}
 
+	drawUI(window);
+
 	window.display();
 
 }
@@ -171,6 +173,33 @@ void GameManager::drawShipPreview(sf::RenderWindow& window)
 			}
 		}
 	}
+}
+
+void GameManager::drawUI(sf::RenderWindow& window)
+{
+	sf::Font font;
+	if (!font.loadFromFile("../Ressources/Font/Arial.ttf")) return;
+
+	std::string string;
+	if (gameState == 0)
+		string = "Please place your boats.";
+	else if (gameState == 1)
+		string = "Waiting for the other player.";
+	else if (gameState == 2)
+		string = "It's your turn, please select a cell to shoot.";
+	else if (gameState == 3)
+		string = "It's the opponent turn, please wait for his shot.";
+	else if (gameState == 4)
+		string = "PLAYER win !";
+
+	sf::Text text(string, font);
+	text.setCharacterSize(24);
+	text.setFillColor(sf::Color::White);
+	sf::FloatRect textRect = text.getLocalBounds();
+	text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	text.setPosition(sf::Vector2f(window.getSize().x / 2.0f, 25));
+	text.setPosition(sf::Vector2f(window.getSize().x / 2, 25));
+	window.draw(text);
 }
 
 GameManager::GameManager(){
