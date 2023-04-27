@@ -141,15 +141,36 @@ void GameManager::drawGame(sf::RenderWindow& window){
 	player[1]->grille().drawGrid(window, PLAYER_2_GRID_POSX, PLAYER_2_GRID_POSY);
 
 	if (gameState == GAMEINIT) {
-		drawShipPreview();
+		drawShipPreview(window);
 	}
 
 	window.display();
 
 }
 
-void GameManager::drawShipPreview()
+void GameManager::drawShipPreview(sf::RenderWindow& window)
 {
+	if (input->currentGrid() != 1) return;
+	if (player[currentPlayer]->grille().canShipFit(player[currentPlayer]->ship(currentShip), input->x(), input->y(), input->rightClick()))
+	{
+		sf::CircleShape shape(SLOT_SIZE_X / 2);
+		if (input->rightClick())
+		{
+			for (int i = 0; i < player[currentPlayer]->ship(currentShip).size(); i++) {
+				shape.setPosition(sf::Vector2f(PLAYER_1_GRID_POSX + input->x() * SLOT_SIZE_X, PLAYER_1_GRID_POSY + (i + input->y()) * SLOT_SIZE_Y));
+				shape.setFillColor(sf::Color(0, 255, 0));
+				window.draw(shape);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < player[currentPlayer]->ship(currentShip).size(); i++) {
+				shape.setPosition(sf::Vector2f(PLAYER_1_GRID_POSX + (i + input->x()) * SLOT_SIZE_X, PLAYER_1_GRID_POSY +  input->y() * SLOT_SIZE_Y));
+				shape.setFillColor(sf::Color(0, 255, 0));
+				window.draw(shape);
+			}
+		}
+	}
 }
 
 GameManager::GameManager(){
