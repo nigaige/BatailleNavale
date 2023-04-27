@@ -1,29 +1,51 @@
 #include "Utils.h"
 
-sf::VertexArray Map::drawGrid(sf::RenderWindow* window)
+void Map::drawGrid(sf::RenderWindow& window, int offX, int offY)
 {
-	int numLines = GRID_SIZE_X + GRID_SIZE_Y - 2;
-	sf::VertexArray grid(sf::Lines, 2 * (numLines));
-	window->setView(window->getDefaultView());
-	auto size = window->getView().getSize();
-	float rowH = size.y / GRID_SIZE_Y;
-	float colW = size.x / GRID_SIZE_X;
-	// row separators
-	for (int i = 0; i < GRID_SIZE_X - 1; i++) {
-		int r = i + 1;
-		float rowY = rowH * r;
-		grid[i * 2].position = { 0, rowY };
-		grid[i * 2 + 1].position = { size.x, rowY };
-	}
-	// column separators
-	for (int i = GRID_SIZE_Y - 1; i < numLines; i++) {
-		int c = i - GRID_SIZE_Y + 2;
-		float colX = colW * c;
-		grid[i * 2].position = { colX, 0 };
-		grid[i * 2 + 1].position = { colX, size.y };
-	}
+	sf::CircleShape shape(SLOT_SIZE_X/2);
+	for (int i = 0; i < GRID_SIZE_X; i++) {
+		for (int j = 0; j < GRID_SIZE_Y; j++) {
+			window.draw(drawSquare(SLOT_SIZE_X * i + offX, SLOT_SIZE_Y * j + offY));
+			shape.setPosition(sf::Vector2f(SLOT_SIZE_X * i + offX, SLOT_SIZE_Y * j + offY));
+			if (grille[i][j] == 0) continue;
+			shape.setPosition(sf::Vector2f(SLOT_SIZE_X * i + offX, SLOT_SIZE_Y * j + offY));
 
-	return grid;
+			switch (grille[i][j]){
+				case 0://EMPTY
+					break;
+				case 1://SHIP
+					shape.setFillColor(sf::Color(128, 128, 128));
+					break;
+				case 2://HIT
+					shape.setFillColor(sf::Color(255, 0, 0));
+					break;
+				case 3://MISS
+					shape.setFillColor(sf::Color(255, 255, 255));
+					break;
+				default:
+					break;
+			}
+			window.draw(shape);
+		}
+	}
+}
+
+
+
+sf::VertexArray Map::drawSquare(int offX, int offY){
+	sf::VertexArray square(sf::LinesStrip, 5);
+	int x0 = 0 + offX;
+	int x1 = SLOT_SIZE_X + offX;
+	int y0 = 0 + offY;
+	int y1 = SLOT_SIZE_Y + offY;
+
+	square[0].position = sf::Vector2f( x0 ,y0 );
+	square[1].position = sf::Vector2f(x0, y1);
+	square[2].position = sf::Vector2f(x1, y1);
+	square[3].position = sf::Vector2f(x1, y0);
+	square[4].position = sf::Vector2f(x0, y0);
+	return square;
+
 }
 
 bool Map::isCoordInGrid(int x, int y){

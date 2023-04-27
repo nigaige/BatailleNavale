@@ -15,5 +15,5 @@ public:
     void swapClick(){rightClick_ = !rightClick_;}
 	void rightClick(bool rightClick) { rightClick_ = rightClick; };
 	bool rightClick() { return rightClick_; };
-	void windowInput(int x, int y, int WinX = WINDOWSIZE_X, int winY = WINDOWSIZE_Y);
+	void windowInput(int x, int y, int gridX, int gridY);
 };

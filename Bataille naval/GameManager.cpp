@@ -19,7 +19,6 @@ void GameManager::init(){
 
 
 void GameManager::game(GameInput& input){
-	gameState = GAMERUNNING;
 	switch (gameState){
 	case GAMEINIT:
 		initShip(input);
@@ -42,6 +41,7 @@ void GameManager::game(GameInput& input){
 
 
 void GameManager::initShip(GameInput& input){
+	std::cout << "hey" << std::endl;
 	if(
 		player[currentPlayer]->
 		placeShip(currentShip,input.x(),input.y(), input.rightClick())
@@ -80,6 +80,29 @@ bool GameManager::testVictory(){
 void GameManager::winner(){
 	//end of game, currentplayer lost
 	//TODO display victory/lose screen
+}
+
+
+
+
+
+void GameManager::drawGame(sf::RenderWindow& window){
+
+
+	window.clear();
+	player[0]->grille().drawGrid(window, PLAYER_1_GRID_POS);
+	player[1]->grille().drawGrid(window, PLAYER_2_GRID_POS);
+
+	if (gameState == GAMEINIT) {
+		drawShipPreview();
+	}
+
+	window.display();
+
+}
+
+void GameManager::drawShipPreview()
+{
 }
 
 GameManager::GameManager(){

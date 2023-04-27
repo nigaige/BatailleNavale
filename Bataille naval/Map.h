@@ -8,7 +8,10 @@ private:
 	int grille[GRID_SIZE_X][GRID_SIZE_Y] = {};	//EMPTY 0 / SHIP 1 / HIT 2 / 3 MISS
 public:
 
-	sf::VertexArray drawGrid(sf::RenderWindow* window);
+	void drawGrid(sf::RenderWindow& window, int offX, int offY);
+	sf::VertexArray drawSquare(int offX, int offY);
+	sf::CircleShape drawPin(int offX, int offY);
+
 	//TODO grille getter
 	//TODO grille slot getter
 

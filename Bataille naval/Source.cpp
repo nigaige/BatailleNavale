@@ -15,8 +15,7 @@ int main()
 
     Map map;
 
-    sf::RenderWindow window(sf::VideoMode(WINDOWSIZE_X, WINDOWSIZE_Y), "Bataille navale");
-    sf::VertexArray grid = map.drawGrid(&window);
+    sf::RenderWindow window(sf::VideoMode(WINDOWSIZE_X, WINDOWSIZE_Y), "Bataille navale!!");
     window.setKeyRepeatEnabled(false);
     
     while (window.isOpen()){
@@ -26,7 +25,7 @@ int main()
                 window.close();
             else if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    input.windowInput(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+                    input.windowInput(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, PLAYER_1_GRID_POS);
                     gm.game(input);
                 }
 
@@ -35,10 +34,7 @@ int main()
                 }
             }
         }
-
-        window.clear();
-        window.draw(grid);
-        window.display();
+        gm.drawGame(window);
     }
 
     return 0;

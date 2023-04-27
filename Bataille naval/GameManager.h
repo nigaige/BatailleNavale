@@ -21,6 +21,9 @@ public:
 	bool testVictory();
 	void winner();
 
+	void drawGame(sf::RenderWindow& window);
+	void drawShipPreview();
+
 	GameManager();
 	virtual ~GameManager();
 };

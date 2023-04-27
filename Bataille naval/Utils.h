@@ -19,8 +19,14 @@
 
 #define GRID_SIZE_X 10
 #define GRID_SIZE_Y 10
-#define WINDOWSIZE_X 200
-#define WINDOWSIZE_Y 200
+#define WINDOWSIZE_X 1000
+#define WINDOWSIZE_Y 1000
+
+#define PLAYER_1_GRID_POS 50,100
+#define PLAYER_2_GRID_POS 400,100
+#define SLOT_SIZE_X 30
+#define SLOT_SIZE_Y 30
+
 
 class Ship;
 class Map;
