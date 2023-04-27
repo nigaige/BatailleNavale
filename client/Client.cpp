@@ -100,18 +100,37 @@ bool Client::sendBuffer(const char* buffer){
 
 std::string Client::receiveBuffer(){
 	string all = "";
-	do {
-	iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-	if (iResult > 0)
-		printf("Bytes received: %d\n", iResult);
-	else if (iResult == 0)
-		printf("Connection closed\n");
-	else
-		printf("recv failed with error: %d\n", WSAGetLastError());
-	//printf(recvbuf);
-	all += recvbuf;
-	} while (iResult > 0);
+
+	fd_set rfds;
+
+	FD_ZERO(&rfds);
+	FD_SET(ConnectSocket, &rfds);
+
+	int recVal = select(ConnectSocket, &rfds, NULL, NULL, &tv);
+	switch (recVal){
+		case(0):
+			//Timeout
+			break;
+		case(-1):
+			//Error
+			break;
+		default:
+	
+			do {
+				iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+				if (iResult > 0)
+					printf("Bytes received: %d\n", iResult);
+				else if (iResult == 0)
+					printf("Connection closed\n");
+				else
+					printf("recv failed with error: %d\n", WSAGetLastError());
+				//printf(recvbuf);
+				all += recvbuf;
+			} while (iResult > 0);
+			break;
+	}
 	return all;
+
 }
 
 void Client::close(){

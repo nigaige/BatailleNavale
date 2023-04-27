@@ -70,8 +70,14 @@ void GameManager::game(){
 
 }
 
-void GameManager::readWaitStart()
-{
+void GameManager::readWaitStart(){
+	std::string out = client->receiveBuffer();
+	if (out.size() == 0) return;//nothing recieved
+	if (out.find("P") == 0) {
+		if (out.find("P") == 2) {
+			gameState = GAMEWAITTURN;
+		}
+	}
 }
 
 
@@ -86,21 +92,19 @@ void GameManager::initShip(){
 			currentShip++;
 			if (currentShip == 5) {
 				gameState = GAMEWAITSTART;
+				client->sendBuffer("R:1");
 			}
 		}
 	}
 }
 
-void GameManager::readSocketQueu()
-{
+void GameManager::readSocketQueu(){
 }
 
-void GameManager::sendShot()
-{
+void GameManager::sendShot(){
 }
 
-void GameManager::recieveShoot()
-{
+void GameManager::recieveShoot(){
 }
 
 void GameManager::turn(){
