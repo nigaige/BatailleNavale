@@ -38,23 +38,6 @@ int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPS
     MSG msg;
 
 
-
-
-  //  srv->socketEvent(&GameManager::Update);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     while (1) {
         srv->ProcessMessage();
     }

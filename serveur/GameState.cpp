@@ -2,32 +2,30 @@
 
 GameState::GameState(StateEnum val, StateMachine* Stm) : State(val, Stm)
 {
-	for (int i = 0; i < stateMachine_->GetGameManager()->GetServer()->GetNBClientConnect(); i++)
-	{
-		playQueue_.push_back(i);
-	}
+
 }
 
 void GameState::Start()
 {
-#ifdef DEBUG
 	cout << "====== Phase 2 : Lets play ! ======" << endl;
 
 	cout << "->" << to_string(playQueue_.size()) << "Player was connect" << endl;
-	for (size_t i = 0; i < playQueue_; i++)
+
+	for (size_t i = 0; i < playQueue_.size(); i++)
 	{
 		cout << "=> Player "<< to_string(i) << " is index : " << to_string(playQueue_[i]) << endl;
 	}
-#endif // DEBUG
-
+	for (int i = 0; i < stateMachine_->GetGameManager()->GetServer()->GetNBClientConnect(); i++)
+	{
+		playQueue_.push_back(i);
+	}
 	SendPlayerTurn();
 }
 
 void GameState::Update(string msg, int indexSock)
 {
-#ifdef DEBUG
-	cout << "-> Player <<Message enter : " << << endl;
-#endif // DEBUG
+	//cout << "-> Player <<Message enter : " << << endl;
+
 	ProcessMessage(msg, indexSock);
 }
 

@@ -4,19 +4,15 @@ StartGameState::StartGameState(StateEnum val, StateMachine* Stm) : State(val, St
 {
 	
 }
-#ifdef DEBUG
-void WaitPlayerState::Start()
+void StartGameState::Start()
 {
 	cout << "====== Phase 1 : Place your boat ! ======" << endl;
 }
-#endif // DEBUG
 
 
 void StartGameState::Update(string msg, int indexSock)
 {
-#ifdef DEBUG
 	cout << "-> Player : " << to_string(indexSock) << " is ready !" << endl;
-#endif // DEBUG
 
 	if (CheckIfReady(msg, indexSock))
 	{
@@ -27,9 +23,7 @@ void StartGameState::Update(string msg, int indexSock)
 
 void StartGameState::End()
 {
-#ifdef DEBUG
 	cout << "=> All Player was ready !\n" << endl;
-#endif // DEBUG
 
 	char msg('P:2');
 

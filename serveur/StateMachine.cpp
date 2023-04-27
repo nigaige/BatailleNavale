@@ -4,7 +4,7 @@ StateMachine::StateMachine(GameManager* gm)
 {
 	gameManager_ = gm;
 	initState();
-	CurrentState(StateEnum::Null);
+	CurrentState(StateEnum::WaitPlayer);
 
 	indexWinner_ = -1;
 
@@ -43,7 +43,6 @@ void StateMachine::Update(string msg, int indexSock)
 		GetState(currentState_)->Update();
 		return;
 	}
-
 	GetState(currentState_)->Update(msg, indexSock);
 }
 
@@ -52,8 +51,8 @@ void StateMachine::initState()
 	stateList_.push_back(new State(StateEnum::Null));
 	stateList_.push_back(new WaitPlayerState(StateEnum::WaitPlayer, this));
 	stateList_.push_back(new StartGameState(StateEnum::StartGame, this));
-	stateList_.push_back(new StartGameState(StateEnum::Game, this));
-	stateList_.push_back(new StartGameState(StateEnum::EndGame, this));
+	stateList_.push_back(new GameState(StateEnum::Game, this));
+	stateList_.push_back(new EndGameState(StateEnum::EndGame, this));
 }
 
 State* StateMachine::GetState(StateEnum val)

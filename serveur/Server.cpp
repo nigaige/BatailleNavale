@@ -180,7 +180,6 @@ bool Server::sendClientData(int socketIndex, char* msg){
 LRESULT Server::realWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
-    printf("msg recieved : ");
     int sockIndex;
     string data;
 
@@ -198,11 +197,14 @@ LRESULT Server::realWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
         return 0;
     }
     case WM_SOCKET:
+        printf("msg recieved : ");
+
         switch (WSAGETSELECTEVENT(lParam)) {
         case FD_ACCEPT:
             // Prepare accepted socket for read, write, and close notification
             printf("FD_ACCEPT\n");
             openClientSocket(wParam);
+            scb->callBack("", -1);
             break;
 
         case FD_READ:

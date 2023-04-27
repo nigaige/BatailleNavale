@@ -4,29 +4,24 @@ WaitPlayerState::WaitPlayerState(StateEnum val, StateMachine* Stm) : State(val, 
 {
 }
 
-#ifdef DEBUG
-	void WaitPlayerState::Start()
-	{
-		cout << "====== WAIT CONNECTION ======" << endl;
-	}
-#endif // DEBUG
+void WaitPlayerState::Start()
+{
+	cout << "====== WAIT CONNECTION ======" << endl;
+}
 
 void WaitPlayerState::Update()
 {
+	cout << "-> A Player was connect !" << endl;
 	if (CheckIfGood()) 
 	{
-#ifdef DEBUG
-		cout << "-> A Player was connect !" << endl;
-#endif // DEBUG
+
 		stateMachine_->CurrentState(StateEnum::StartGame);
 	}
 }
 
 void WaitPlayerState::End()
 {
-#ifdef DEBUG
 	cout << "=> Lobby is full ! \n" << endl;
-#endif // DEBUG
 
 	const char* msg = "P:1";
 	char* chr = const_cast<char*>(msg);
