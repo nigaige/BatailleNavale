@@ -101,6 +101,9 @@ bool Client::sendBuffer(const char* buffer){
 std::string Client::receiveBuffer(){
 	string all = "";
 
+	memset(recvbuf, 0, sizeof(recvbuf));
+	cout << "buffer content : " << recvbuf << endl;
+
 	fd_set rfds;
 
 	FD_ZERO(&rfds);
@@ -117,6 +120,7 @@ std::string Client::receiveBuffer(){
 		default:
 	
 			do {
+				all = "";
 				iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 				if (iResult > 0) {
 					printf("Bytes received: %d\n", iResult);
@@ -129,7 +133,9 @@ std::string Client::receiveBuffer(){
 					printf("recv failed with error: %d\n", WSAGetLastError());
 				//printf(recvbuf);
 				all += recvbuf;
-			} while (iResult > 0);
+				std::cout << "le pb est la => "<< iResult << std::endl;
+
+			} while (iResult > 0); 
 			break;
 	}
 	return all;
