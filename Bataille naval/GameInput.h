@@ -11,7 +11,7 @@ private:
 
 	bool leftClick_;
 
-	int CurrentGrid_;
+	int currentGrid_;
 
 public:
     GameInput ();
@@ -24,9 +24,12 @@ public:
 	bool rightClick() { return rightClick_; };
 	void leftClick(bool leftClick) { leftClick_ = leftClick; }
 	bool leftClick() { return leftClick_; }
-	void windowInput(int x, int y, int gridX, int gridY);
+	int currentGrid() { return currentGrid_; }
+
+
+	void windowInput();
 	void mousePos(sf::RenderWindow* window);
 
-	void CurrentGrid();
+	void checkCurrentGrid();
 
 };

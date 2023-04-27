@@ -23,7 +23,8 @@ void GameManager::init(){
 void GameManager::readInput(sf::RenderWindow *window){
 
 	input->mousePos(window);
-	input->CurrentGrid();
+	input->checkCurrentGrid();
+	input->windowInput();
 	
 
 	while (window->pollEvent(event)) {
@@ -75,20 +76,18 @@ void GameManager::readWaitStart()
 
 
 void GameManager::initShip(){
-	
-	
-	/*
-	if(
-		player[currentPlayer]->
-		placeShip(currentShip,input.x(),input.y(), input.rightClick())
-	){
-		currentShip++;
-		if (currentShip == 5){
-			gameState = GAMEWAITSTART;
-
+	if (input->leftClick() && input->currentGrid() == 1) {
+		input->leftClick(false);
+		if (
+			player[currentPlayer]->
+			placeShip(currentShip, input->x(), input->y(), input->rightClick())
+			) {
+			printf("boat placed");
+			currentShip++;
+			if (currentShip == 5) {
+				gameState = GAMEWAITSTART;
+			}
 		}
-	}*/
-	if (currentPlayer == 2) {
 	}
 }
 
