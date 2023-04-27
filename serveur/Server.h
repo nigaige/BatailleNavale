@@ -3,6 +3,7 @@
 #define DEFAULT_PORT "80"
 #define WM_SOCKET WM_USER +1 
 
+class GameManager;
 
 class Server
 {
@@ -26,17 +27,16 @@ class Server
     int recvbuflen = DEFAULT_BUFLEN;
 
     int maxClient_ = 2;
-    void (*socketEvent_)(string msg, int indexSock);
-
-
+    //void(*socketEvent_) (string msg, int indexSock);
+    ServerCallBack* scb = nullptr;
 
 public:
+    void setScb(ServerCallBack* callback) { scb = callback; }
+    
     Server(_In_ HINSTANCE hInstance);
     virtual ~Server();
     void maxClient(int maxClient) { maxClient_ = maxClient; }
     int maxClient() { return maxClient_; }
-    void socketEvent(void(*f)(string msg, int indexSock)) { socketEvent_ = f; }
-
     int GetNBClientConnect() { return ClientSocket.size(); }
 
 
@@ -60,6 +60,15 @@ public:
 
     bool ProcessMessage();
     void closeServer();
+
+
+
+
+
+
+
+
+
 
 };
 

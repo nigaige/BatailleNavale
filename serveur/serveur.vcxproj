@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameManagerCallback.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="ServerCallBack.h" />
     <ClInclude Include="StartGameState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
@@ -141,8 +143,10 @@
   <ItemGroup>
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameManagerCallback.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="ServerCallBack.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StartGameState.cpp" />
     <ClCompile Include="State.cpp" />

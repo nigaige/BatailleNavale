@@ -25,6 +25,9 @@ void GameState::Start()
 
 void GameState::Update(string msg, int indexSock)
 {
+#ifdef DEBUG
+	cout << "-> Player <<Message enter : " << << endl;
+#endif // DEBUG
 	ProcessMessage(msg, indexSock);
 }
 

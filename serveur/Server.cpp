@@ -1,4 +1,4 @@
-﻿#include "Utils.h"
+﻿#include "GameUtils.h"
 
 
 Server::Server(_In_ HINSTANCE hInstance):hInstance_(hInstance){
@@ -7,6 +7,7 @@ Server::Server(_In_ HINSTANCE hInstance):hInstance_(hInstance){
 Server::~Server()
 {
 }
+
 
 bool Server::init()
 {
@@ -211,7 +212,7 @@ LRESULT Server::realWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             sockIndex = findSocket(wParam);
             data = recieveClientData(sockIndex);
             std::cout<<data;
-            socketEvent_(data, sockIndex);
+            scb->callBack(data, sockIndex);
             break;
 
         case FD_WRITE:

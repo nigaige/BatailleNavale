@@ -4,6 +4,8 @@
 
 
 #include "Utils.h"
+#include "GameUtils.h"
+
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -27,13 +29,34 @@ int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPS
 #endif // DEBUG
 
 
+    GameManager* gameManager = new GameManager();
+    GameManagerCallback* gm = new GameManagerCallback(gameManager);
     Server* srv = new Server(hInstance);
+    srv->setScb(gm);
+    gameManager->setServer(srv);
     srv->init();
     MSG msg;
 
+
+
+
+  //  srv->socketEvent(&GameManager::Update);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     while (1) {
         srv->ProcessMessage();
-
     }
 
     return 0;

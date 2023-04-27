@@ -1,9 +1,11 @@
+#include "Utils.h"
 #include "GameUtils.h"
 
 GameManager::GameManager(Server* serv)
 {
 	server_ = serv;
 	stateMachine_ = new StateMachine(this);
+	//server_->socketEvent(Update);
 }
 
 GameManager::~GameManager() 
