@@ -14,7 +14,7 @@ void StartGameState::Update(string msg, int indexSock)
 
 void StartGameState::End()
 {
-	char msg = 'P:2';
+	char msg('P:2');
 
 	for (int i = 0; i < readyIndexSocket_.size(); i++)
 	{

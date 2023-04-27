@@ -6,6 +6,8 @@ using namespace std;
 #include <vector>
 #include <iostream>
 
+#define _CRT_SECURE_NO_WARNINGS
+
 enum StateEnum;
 
 class Server;

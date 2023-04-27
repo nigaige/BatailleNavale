@@ -15,3 +15,5 @@ void GameManager::Update(string msg, int indexSock)
 {
 	stateMachine_->Update(msg, indexSock);
 }
+
+
