@@ -38,7 +38,7 @@ public:
 
 
 	void drawGame(sf::RenderWindow& window);
-	void drawShipPreview();
+	void drawShipPreview(sf::RenderWindow& window);
 
 	GameManager();
 	virtual ~GameManager();

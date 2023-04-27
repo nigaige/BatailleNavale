@@ -10,6 +10,16 @@ GameState::GameState(StateEnum val, StateMachine* Stm) : State(val, Stm)
 
 void GameState::Start()
 {
+#ifdef DEBUG
+	cout << "====== Phase 2 : Lets play ! ======" << endl;
+
+	cout << "->" << to_string(playQueue_.size()) << "Player was connect" << endl;
+	for (size_t i = 0; i < playQueue_; i++)
+	{
+		cout << "=> Player "<< to_string(i) << " is index : " << to_string(playQueue_[i]) << endl;
+	}
+#endif // DEBUG
+
 	SendPlayerTurn();
 }
 
