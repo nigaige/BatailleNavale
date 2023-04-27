@@ -41,12 +41,15 @@ void GameManager::readInput(sf::RenderWindow *window){
 }
 
 void GameManager::game(){
+
 	switch (gameState){
 	case GAMEINIT://Place the ship
 		initShip();
 		break;
 	case GAMEWAITSTART://waiting otherPlayer
+		std::cout << "ça bloque ?" << std::endl;
 		readWaitStart();
+		std::cout << "a bah non sa bloque pas" << std::endl;
 		break;
 	case GAMEWAITTURN:
 		waitPlayerNumber();
@@ -78,10 +81,13 @@ void GameManager::readWaitStart(){
 	std::string out = client->receiveBuffer();
 	if (out.size() == 0) return;//nothing recieved
 	if (out.find("P") == 0) {
-		if (out.find("P") == 2) {
+		std::cout << "hey" << std::endl;
+		if (out.find("2") == 2) {
+			std::cout << "2" << std::endl;
 			gameState = GAMEWAITTURN;
 		}
 	}
+
 }
 
 
@@ -92,7 +98,7 @@ void GameManager::initShip(){
 			player[0]->
 			placeShip(currentShip, input->x(), input->y(), input->rightClick())
 			) {
-			printf("boat placed");
+			printf("boat placed\n");
 			currentShip++;
 			if (currentShip == 5) {
 				gameState = GAMEWAITSTART;
@@ -119,7 +125,7 @@ void GameManager::recieveShoot(){
 	const char* resultBuffer;
 	std::string out = client->receiveBuffer();
 	if (out.size() == 0) return;//nothing recieved
-	if (out.find("S") == 1) {
+	if (out.find("S") == 0) {
 		int x = stoi(out.substr(0, out.find(",")));
 		int y = stoi(out.substr(out.find(","),out.length()));
 		if (player[0]->grille().shoot(x, y)) {
@@ -139,7 +145,7 @@ void GameManager::waitShootResult()
 {
 	std::string out = client->receiveBuffer();
 	if (out.size() == 0) return;//nothing recieved
-	if (out.find("R") == 1) {
+	if (out.find("R") == 0) {
 		std::string result = out.substr(4, out.length());
 		player[1]->grille().wasShot(player[0]->xShot(), player[0]->yShot(), result == "1" ? true : false);
 		
@@ -150,7 +156,7 @@ void GameManager::waitPlayerNumber()
 {
 	std::string out = client->receiveBuffer();
 	if (out.size() == 0) return;//nothing recieved
-	if (out.find("T") == 1) {
+	if (out.find("T") == 0) {
 		std::string result = out.substr(2, out.length());
 		gameState = result == "1" ? GAMERUNNINGISTURN : GAMERUNNINGNOTTURN;
 	}

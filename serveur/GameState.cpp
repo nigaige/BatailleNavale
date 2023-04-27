@@ -35,11 +35,13 @@ void GameState::Update(string msg, int indexSock)
 
 void GameState::End()
 {
-	char msg('P:3');
+	const char* msg = "P:3";
+	char* chr = const_cast<char*>(msg);
+
 
 	for (int i = 0; i < stateMachine_->GetGameManager()->GetServer()->GetNBClientConnect(); i++)
 	{
-		stateMachine_->GetGameManager()->GetServer()->sendClientData(i, &msg);
+		stateMachine_->GetGameManager()->GetServer()->sendClientData(i, chr);
 	}
 }
 
@@ -113,8 +115,6 @@ bool GameState::ProcessMessageResult(string msg)
 
 bool GameState::ProcessMessageFinish(string msg, int indexSock)
 {
-	char win = 'F:1';
-	char lose = 'F:0';
 
 	if (msg.length() > 1)
 		return false; // TODO => s'occuper des messages d'erreur (Taille de message incorrect)
@@ -157,12 +157,15 @@ bool GameState::PlayerTurn()
 void GameState::SendPlayerTurn()
 {
 	//P1
-	char msgP1('T:1');
-	stateMachine_->GetGameManager()->GetServer()->sendClientData(playQueue_[0], &msgP1);
+	const char* msg = "T:1";
+	char* chr = const_cast<char*>(msg);
+
+	stateMachine_->GetGameManager()->GetServer()->sendClientData(playQueue_[0], chr);
 	
 	//P2
-	char msgP2('T:0');
-	stateMachine_->GetGameManager()->GetServer()->sendClientData(playQueue_[1], &msgP2);
+	const char* msg2 = "T:0";
+	char* chr2 = const_cast<char*>(msg2);
+	stateMachine_->GetGameManager()->GetServer()->sendClientData(playQueue_[1], chr2);
 }
 
 

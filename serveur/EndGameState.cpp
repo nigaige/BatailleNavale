@@ -15,14 +15,18 @@ void EndGameState::Start()
 
 void EndGameState::SendFinishMessage(int winnerIndex)
 {
-	char win = 'F:1';
-	stateMachine_->GetGameManager()->GetServer()->sendClientData(winnerIndex, &win);
+	const char* msg = "F:1";
+	char* chr = const_cast<char*>(msg);
+
+	stateMachine_->GetGameManager()->GetServer()->sendClientData(winnerIndex, chr);
 
 	cout << "=> Player " << to_string(winnerIndex) << endl;
 
-	char lose = 'F:0';
+	const char* msg2 = "F:0";
+	char* chr2 = const_cast<char*>(msg2);
+
 	if (winnerIndex == 1)
-		stateMachine_->GetGameManager()->GetServer()->sendClientData(0, &lose);
+		stateMachine_->GetGameManager()->GetServer()->sendClientData(0, chr2);
 	else
-		stateMachine_->GetGameManager()->GetServer()->sendClientData(1, &lose);
+		stateMachine_->GetGameManager()->GetServer()->sendClientData(1, chr2);
 }

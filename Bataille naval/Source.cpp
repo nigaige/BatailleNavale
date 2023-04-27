@@ -19,6 +19,7 @@ int main()
     
     while (window.isOpen()){
 
+
         gm.readInput(&window);
         gm.game();
         gm.drawGame(window);

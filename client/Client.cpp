@@ -118,8 +118,11 @@ std::string Client::receiveBuffer(){
 	
 			do {
 				iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-				if (iResult > 0)
+				if (iResult > 0) {
 					printf("Bytes received: %d\n", iResult);
+					std::cout << recvbuf << std::endl;
+				}
+
 				else if (iResult == 0)
 					printf("Connection closed\n");
 				else

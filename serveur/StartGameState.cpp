@@ -25,11 +25,12 @@ void StartGameState::End()
 {
 	cout << "=> All Player was ready !\n" << endl;
 
-	char msg('P:2');
+	const char* msg = "P:2";
+	char* chr = const_cast<char*>(msg);
 
 	for (int i = 0; i < readyIndexSocket_.size(); i++)
 	{
-		stateMachine_->GetGameManager()->GetServer()->sendClientData(i, &msg);
+		stateMachine_->GetGameManager()->GetServer()->sendClientData(i, chr);
 	}
 
 }
