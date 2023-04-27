@@ -23,6 +23,7 @@ public:
 	void placeShip(Ship& ship, int x, int y);
 	//Shoot
 	bool shoot(int x, int y);
+	void wasShot(int x, int y, bool shot);
 
 
 	Map();

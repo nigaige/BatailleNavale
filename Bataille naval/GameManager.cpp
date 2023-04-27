@@ -3,7 +3,6 @@
 void GameManager::init(){
 	gameState = GAMEINIT;
 	turnCount = 0;
-	currentPlayer = 0;
 	currentShip = 0;
 	delete player[0];//In case the function is called again to prevent memory leak
 	delete player[1];
@@ -43,21 +42,26 @@ void GameManager::readInput(sf::RenderWindow *window){
 
 void GameManager::game(){
 	switch (gameState){
-	case GAMEINIT:
+	case GAMEINIT://Place the ship
 		initShip();
 		break;
-	case GAMEWAITSTART:
+	case GAMEWAITSTART://waiting otherPlayer
 		readWaitStart();
+		break;
+	case GAMEWAITTURN:
+		waitPlayerNumber();
 		break;
 	case GAMERUNNINGISTURN:
 		sendShot();
 		if (testVictory())
 			gameState = GAMEFINISH;
 		break;
+	case GAMESHOTSENT:
+		waitShootResult();
+		break;
 	case GAMERUNNINGNOTTURN:
 		recieveShoot();
 		break;
-
 	case GAMEFINISH:
 		winner();
 		break;
@@ -85,7 +89,7 @@ void GameManager::initShip(){
 	if (input->leftClick() && input->currentGrid() == 1) {
 		input->leftClick(false);
 		if (
-			player[currentPlayer]->
+			player[0]->
 			placeShip(currentShip, input->x(), input->y(), input->rightClick())
 			) {
 			printf("boat placed");
@@ -98,13 +102,58 @@ void GameManager::initShip(){
 	}
 }
 
-void GameManager::readSocketQueu(){
+void GameManager::sendShot(){
+	if (input->leftClick() && input->currentGrid() == 2) {
+		input->leftClick(false);
+		player[0]->xShot(input->x());
+		player[0]->yShot(input->y());
+		std::string temp = "S : " + std::to_string(player[0]->xShot()) + ", " + std::to_string(player[0]->yShot()) + "\n";
+		const char* shootBuffer = temp.c_str();
+		client->sendBuffer(shootBuffer);
+		gameState = GAMESHOTSENT;
+	}
 }
 
-void GameManager::sendShot(){
-}
 
 void GameManager::recieveShoot(){
+	const char* resultBuffer;
+	std::string out = client->receiveBuffer();
+	if (out.size() == 0) return;//nothing recieved
+	if (out.find("S") == 1) {
+		int x = stoi(out.substr(0, out.find(",")));
+		int y = stoi(out.substr(out.find(","),out.length()));
+		if (player[0]->grille().shoot(x, y)) {
+			player[(0 == 1) ? 0 : 1]		//otherPlayer
+				->HP(player[0]->HP() - 1);	//reduce their hp
+			resultBuffer = "R : 1";
+			client->sendBuffer(resultBuffer);
+		}
+		else {
+			resultBuffer = "R : 0";
+			client->sendBuffer(resultBuffer);
+		}
+	}
+}
+
+void GameManager::waitShootResult()
+{
+	std::string out = client->receiveBuffer();
+	if (out.size() == 0) return;//nothing recieved
+	if (out.find("R") == 1) {
+		std::string result = out.substr(4, out.length());
+		player[1]->grille().wasShot(player[0]->xShot(), player[0]->yShot(), result == "1" ? true : false);
+		
+	}
+}
+
+void GameManager::waitPlayerNumber()
+{
+	std::string out = client->receiveBuffer();
+	if (out.size() == 0) return;//nothing recieved
+	if (out.find("T") == 1) {
+		std::string result = out.substr(2, out.length());
+		gameState = result == "1" ? GAMERUNNINGISTURN : GAMERUNNINGNOTTURN;
+	}
 }
 
 void GameManager::turn(){
@@ -112,24 +161,24 @@ void GameManager::turn(){
 	std::string temp = "S : " + std::to_string(input.x()) + ", " + std::to_string(input.y()) + "\n";
 	const char* shootBuffer = temp.c_str();
 	client->sendBuffer(shootBuffer);
-	if (player[currentPlayer]->grille().shoot(input.x(), input.y())) {
-		player[(currentPlayer == 1) ? 0 : 1]		//otherPlayer
-			->HP(player[currentPlayer]->HP() - 1);	//reduce their hp
+	if (player[0]->grille().shoot(input.x(), input.y())) {
+		player[(0 == 1) ? 0 : 1]		//otherPlayer
+			->HP(player[0]->HP() - 1);	//reduce their hp
 	};
-	temp = "R : " + std::to_string(player[currentPlayer]->grille().shoot(input.x(), input.y())) + "\n";
+	temp = "R : " + std::to_string(player[0]->grille().shoot(input.x(), input.y())) + "\n";
 	const char* resultBuffer = temp.c_str();
 	client->sendBuffer(resultBuffer);
 	turnCount++;
-	currentPlayer = (currentPlayer == 1) ? 0 : 1;	//Swap player*/
+	0 = (0 == 1) ? 0 : 1;	//Swap player*/
 }
 
 
 bool GameManager::testVictory(){
-	return player[currentPlayer]->HP() > 0;
+	return player[0]->HP() > 0;
 }
 
 void GameManager::winner(){
-	//end of game, currentplayer lost
+	//end of game, 0 lost
 	//TODO display victory/lose screen
 }
 
@@ -157,12 +206,12 @@ void GameManager::drawGame(sf::RenderWindow& window){
 void GameManager::drawShipPreview(sf::RenderWindow& window)
 {
 	if (input->currentGrid() != 1) return;
-	if (player[currentPlayer]->grille().canShipFit(player[currentPlayer]->ship(currentShip), input->x(), input->y(), input->rightClick()))
+	if (player[0]->grille().canShipFit(player[0]->ship(currentShip), input->x(), input->y(), input->rightClick()))
 	{
 		sf::CircleShape shape(SLOT_SIZE_X / 2);
 		if (input->rightClick())
 		{
-			for (int i = 0; i < player[currentPlayer]->ship(currentShip).size(); i++) {
+			for (int i = 0; i < player[0]->ship(currentShip).size(); i++) {
 				shape.setPosition(sf::Vector2f(PLAYER_1_GRID_POSX + input->x() * SLOT_SIZE_X, PLAYER_1_GRID_POSY + (i + input->y()) * SLOT_SIZE_Y));
 				shape.setFillColor(sf::Color(0, 255, 0));
 				window.draw(shape);
@@ -170,7 +219,7 @@ void GameManager::drawShipPreview(sf::RenderWindow& window)
 		}
 		else
 		{
-			for (int i = 0; i < player[currentPlayer]->ship(currentShip).size(); i++) {
+			for (int i = 0; i < player[0]->ship(currentShip).size(); i++) {
 				shape.setPosition(sf::Vector2f(PLAYER_1_GRID_POSX + (i + input->x()) * SLOT_SIZE_X, PLAYER_1_GRID_POSY +  input->y() * SLOT_SIZE_Y));
 				shape.setFillColor(sf::Color(0, 255, 0));
 				window.draw(shape);
@@ -210,7 +259,6 @@ GameManager::GameManager(){
 	player[0] = nullptr;
 	player[1] = nullptr;
 	turnCount = 0;
-	currentPlayer = 0;
 }
 
 GameManager::~GameManager(){

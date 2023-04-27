@@ -110,6 +110,11 @@ bool Map::shoot(int x, int y)
 	grille[x][y] = 3;
 	return false;
 }
+void Map::wasShot(int x, int y, bool shot)
+{
+	grille[x][y] = (shot)?2:3;
+}
+
 Map::Map(){
 	for (int i = 0; i < 10; i++) {
 		for (int j=0; j < 10; j++) {
