@@ -18,7 +18,7 @@ public:
 	bool isCoordInGrid(int x, int y);
 	//Ship management
 	bool addShip(Ship& ship, int x,int y);
-	bool canShipFit(Ship& ship, int x, int y);
+	bool canShipFit(Ship& ship, int x, int y, bool orientation);
 	bool isShipHere(int x, int y);
 	void placeShip(Ship& ship, int x, int y);
 	//Shoot

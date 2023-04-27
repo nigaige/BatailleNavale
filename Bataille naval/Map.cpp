@@ -49,12 +49,12 @@ sf::VertexArray Map::drawSquare(int offX, int offY){
 }
 
 bool Map::isCoordInGrid(int x, int y){
-	return x >= 0 && x<GRID_SIZE_X && y>=0 && y<GRID_SIZE_Y;
+	return x >= 0 && x<=GRID_SIZE_X && y>=0 && y<=GRID_SIZE_Y;
 }
 
 bool Map::addShip(Ship& ship, int x, int y){
 	//Test if ship fit
-	if (canShipFit(ship, x, y)) {
+	if (canShipFit(ship, x, y, ship.orientation())) {
 		//store it in map
 		placeShip(ship, x, y);
 		return true;
@@ -62,25 +62,24 @@ bool Map::addShip(Ship& ship, int x, int y){
 	return false;
 }
 
-bool Map::canShipFit(Ship& ship, int x, int y)
+bool Map::canShipFit(Ship& ship, int x, int y, bool orientation)
 {
 	//is coordinate in grid
 	if (!isCoordInGrid(x, y)) throw "coord not in grid";
 	//ship orientation
 	//fit in grid with its size
-	if(ship.orientation()?
-		!isCoordInGrid(x,y+ ship.size()):
-		!isCoordInGrid(x + ship.size(),y)
-		)return false;
+	if (orientation ?
+		!isCoordInGrid(x, y + ship.size()) :
+		!isCoordInGrid(x + ship.size(), y)
+		) return false;
 	
 	//Check if place is empty
 	for (int i = 0; i < ship.size(); i++) {
-		if (ship.orientation() ?
+		if (orientation ?
 			isShipHere(x, y + i) :
 			isShipHere(x + i, y)
-			)return false;
+			) return false;
 	}
-
 	return true;
 }
 

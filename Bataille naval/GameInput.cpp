@@ -27,7 +27,6 @@ void GameInput::windowInput(){
         y_ = -1;
 
     }
-    std::cout << "X:" + std::to_string(x_) + "Y:" + std::to_string(y_) << std::endl;
 
 }
 
