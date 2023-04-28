@@ -6,7 +6,8 @@
 #define GAMERUNNINGISTURN 3
 #define GAMESHOTSENT 4
 #define GAMERUNNINGNOTTURN 5
-#define GAMEFINISH 6
+#define GAMEFINISHLOSE 6
+#define GAMEFINISHWIN 7
 
 class GameManager
 {
@@ -39,6 +40,7 @@ public:
 
 	void drawGame(sf::RenderWindow& window);
 	void drawShipPreview(sf::RenderWindow& window);
+	void drawShootPreview(sf::RenderWindow& window);
 	void drawUI(sf::RenderWindow& window);
 
 	GameManager();

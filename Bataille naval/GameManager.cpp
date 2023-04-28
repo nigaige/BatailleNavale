@@ -44,31 +44,44 @@ void GameManager::game(){
 
 	switch (gameState){
 	case GAMEINIT://Place the ship
+		printf("GAMEINIT\n");
 		initShip();
 		break;
 	case GAMEWAITSTART://waiting otherPlayer
+		printf("GAMEWAITSTART\n");
+
 		std::cout << "ça bloque ?" << std::endl;
 		readWaitStart();
-		std::cout << "a bah non sa bloque pas" << std::endl;
+		//std::cout << "a bah non sa bloque pas" << std::endl;
 		break;
 	case GAMEWAITTURN:
+		printf("GAMEWAITTURN\n");
+
 		waitPlayerNumber();
 		break;
 	case GAMERUNNINGISTURN:
+		printf("GAMERUNNINGISTURN\n");
+
 		sendShot();
-		if (testVictory())
-			gameState = GAMEFINISH;
 		break;
 	case GAMESHOTSENT:
+		printf("GAMESHOTSENT\n");
+
 		waitShootResult();
 		break;
 	case GAMERUNNINGNOTTURN:
+		printf("GAMERUNNINGNOTTURN\n");
+
 		recieveShoot();
 		break;
-	case GAMEFINISH:
+	case GAMEFINISHLOSE:
+		printf("GAMEFINISHLOSE\n");
+
 		winner();
 		break;
-
+	case GAMEFINISHWIN:
+		printf("GAMEFINISHWIN\n");
+		break;
 	default:
 		break;
 	}
@@ -106,6 +119,7 @@ void GameManager::initShip(){
 			}
 		}
 	}
+	input->leftClick(false);
 }
 
 void GameManager::sendShot(){
@@ -113,11 +127,12 @@ void GameManager::sendShot(){
 		input->leftClick(false);
 		player[0]->xShot(input->x());
 		player[0]->yShot(input->y());
-		std::string temp = "S : " + std::to_string(player[0]->xShot()) + ", " + std::to_string(player[0]->yShot()) + "\n";
+		std::string temp = "S:" + std::to_string(player[0]->xShot()) + "," + std::to_string(player[0]->yShot()) + "\n";
 		const char* shootBuffer = temp.c_str();
 		client->sendBuffer(shootBuffer);
 		gameState = GAMESHOTSENT;
 	}
+	input->leftClick(false);
 }
 
 
@@ -126,19 +141,34 @@ void GameManager::recieveShoot(){
 	std::string out = client->receiveBuffer();
 	if (out.size() == 0) return;//nothing recieved
 	if (out.find("S") == 0) {
-		int x = stoi(out.substr(0, out.find(",")));
-		int y = stoi(out.substr(out.find(","),out.length()));
+		int x = stoi(out.substr(2,3));
+		int y = stoi(out.substr(4,out.length()));
 		if (player[0]->grille().shoot(x, y)) {
-			player[(0 == 1) ? 0 : 1]		//otherPlayer
-				->HP(player[0]->HP() - 1);	//reduce their hp
-			resultBuffer = "R : 1";
+			player[0]->HP(player[0]->HP() - 1);	//reduce their hp
+			resultBuffer = "R:1";
 			client->sendBuffer(resultBuffer);
 		}
 		else {
-			resultBuffer = "R : 0";
+			resultBuffer = "R:0";
 			client->sendBuffer(resultBuffer);
 		}
+
+		if (testVictory()) {
+			resultBuffer = "F:0";
+			client->sendBuffer(resultBuffer);
+			gameState = GAMEFINISHLOSE;
+			return;
+		}
+			
+		gameState = GAMERUNNINGISTURN;
+
 	}
+
+	if (out.find("F") == 0) {
+		gameState = GAMEFINISHWIN;
+
+	}
+
 }
 
 void GameManager::waitShootResult()
@@ -146,17 +176,20 @@ void GameManager::waitShootResult()
 	std::string out = client->receiveBuffer();
 	if (out.size() == 0) return;//nothing recieved
 	if (out.find("R") == 0) {
-		std::string result = out.substr(4, out.length());
+		std::string result = out.substr(2, out.length());
 		player[1]->grille().wasShot(player[0]->xShot(), player[0]->yShot(), result == "1" ? true : false);
-		
+		gameState = GAMERUNNINGNOTTURN;
 	}
 }
 
 void GameManager::waitPlayerNumber()
 {
 	std::string out = client->receiveBuffer();
+	std::cout <<"player number" << out;
 	if (out.size() == 0) return;//nothing recieved
+	
 	if (out.find("T") == 0) {
+		
 		std::string result = out.substr(2, out.length());
 		gameState = result == "1" ? GAMERUNNINGISTURN : GAMERUNNINGNOTTURN;
 	}
@@ -180,7 +213,7 @@ void GameManager::turn(){
 
 
 bool GameManager::testVictory(){
-	return player[0]->HP() > 0;
+	return player[0]->HP() == 0;
 }
 
 void GameManager::winner(){
@@ -202,10 +235,23 @@ void GameManager::drawGame(sf::RenderWindow& window){
 	if (gameState == GAMEINIT) {
 		drawShipPreview(window);
 	}
+	if (gameState == GAMERUNNINGISTURN) {
+		drawShootPreview(window);
+	}
 
 	drawUI(window);
 
 	window.display();
+
+}
+
+void GameManager::drawShootPreview(sf::RenderWindow& window)
+{
+	if (input->currentGrid() != 2) return;
+	sf::CircleShape shape(SLOT_SIZE_X / 2);
+	shape.setPosition(sf::Vector2f(PLAYER_2_GRID_POSX + input->x() * SLOT_SIZE_X, PLAYER_2_GRID_POSY + (input->y()) * SLOT_SIZE_Y));
+	shape.setFillColor(sf::Color(255, 0, 0));
+	window.draw(shape);
 
 }
 
@@ -234,22 +280,35 @@ void GameManager::drawShipPreview(sf::RenderWindow& window)
 	}
 }
 
+/*
+#define GAMEINIT 0
+#define GAMEWAITSTART 1
+#define GAMEWAITTURN 2
+#define GAMERUNNINGISTURN 3
+#define GAMESHOTSENT 4
+#define GAMERUNNINGNOTTURN 5
+#define GAMEFINISH 6
+
+*/
+
 void GameManager::drawUI(sf::RenderWindow& window)
 {
 	sf::Font font;
 	if (!font.loadFromFile("../Ressources/Font/Arial.ttf")) return;
 
 	std::string string;
-	if (gameState == 0)
+	if (gameState == GAMEINIT)
 		string = "Please place your boats.";
-	else if (gameState == 1)
+	else if (gameState == GAMEWAITSTART)
 		string = "Waiting for the other player.";
-	else if (gameState == 2)
+	else if (gameState == GAMERUNNINGISTURN)
 		string = "It's your turn, please select a cell to shoot.";
-	else if (gameState == 3)
+	else if (gameState == GAMERUNNINGNOTTURN)
 		string = "It's the opponent turn, please wait for his shot.";
-	else if (gameState == 4)
-		string = "PLAYER win !";
+	else if (gameState == GAMEFINISHLOSE)
+		string = "YOU LOSE!!!!";
+	else if (gameState == GAMEFINISHWIN)
+		string = "YOU WIN!!!!";
 
 	sf::Text text(string, font);
 	text.setCharacterSize(24);

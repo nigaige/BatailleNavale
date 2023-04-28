@@ -145,28 +145,51 @@ int Server::findSocket(int socketValue){
     return -1;
 }
 
+
+
+
+
+
+int Server::findBufferLen(int socketIndex){
+    string stash = "";
+    do {
+        iResult = recv(ClientSocket[socketIndex], recvbuf, 1, 0);
+        if (iResult < 0) return 0;
+        if (recvbuf[0] != ':') {
+            stash += recvbuf;
+        }
+    } while (recvbuf[0] != ':' && iResult > 0);
+    std::cout<<stash;
+    return stoi(stash);
+}
+
 string Server::recieveClientData(int socketIndex)
 {
+    memset(recvbuf, 0, sizeof(recvbuf));
+
     string all = "";
-    do {
-        iResult = recv(ClientSocket[socketIndex], recvbuf, recvbuflen, 0);
-        if (iResult > 0)
-            printf("Bytes received: %d\n", iResult);
-        else if (iResult == 0)
-            printf("Connection closed\n");
-        else {
-            if (WSAGetLastError() == WSAEWOULDBLOCK)break;  //Nothing left to read
-            printf("recv failed with error: %d\n", WSAGetLastError());
-        }
+    iResult = recv(ClientSocket[socketIndex], recvbuf, findBufferLen(socketIndex), 0);
+    if (iResult > 0)
+        printf("Bytes received: %d\n", iResult);
+    else if (iResult == 0)
+        printf("Connection closed\n");
+    else {
+       // if (WSAGetLastError() == WSAEWOULDBLOCK)break;  //Nothing left to read
+        printf("recv failed with error: %d\n", WSAGetLastError());
+    }
             
            
-        //printf(recvbuf);
-        all += recvbuf;
-    } while (iResult > 0);
+    //printf(recvbuf);
+    all += recvbuf;
+    cout<<all;
     return all;
 }
 
 bool Server::sendClientData(int socketIndex, char* msg){
+
+    std::string s = to_string((int)strlen(msg)) + ":";
+    char const* pchar = s.c_str();  //use char const* as target type
+    iResult = send(ClientSocket[socketIndex], pchar, (int)strlen(pchar), 0);
 
     iResult = send(ClientSocket[socketIndex], msg, (int)strlen(msg), 0);
     if (iResult == SOCKET_ERROR) {

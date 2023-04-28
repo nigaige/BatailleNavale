@@ -12,6 +12,23 @@
 #include <iostream>
 #include <string.h>
 
+#include <sstream>
+
+namespace patch
+{
+    template < typename T > std::string to_string(const T& n)
+    {
+        std::ostringstream stm;
+        stm << n;
+        return stm.str();
+    }
+}
+
+
+
+
+
+
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")

@@ -48,6 +48,7 @@ public:
     void closeClientSocket(WPARAM wParam);
     int findSocket(int socketValue);
 
+    int findBufferLen(int socketIndex);
     string recieveClientData(int socketIndex) ;
     bool sendClientData(int socketIndex, char* msg);
 

@@ -3,7 +3,7 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "80"
 
-class Client{
+class Client {
 private:
 	PCSTR addr_ = "";
 	char* buff_;
@@ -16,15 +16,14 @@ private:
 	struct addrinfo* result = NULL,
 		* ptr = NULL,
 		hints;
+	const struct timeval tv = { 1,0 };
 
 public:
 	Client();
+	int findBufferLen();
 	bool init(PCSTR addr);
 	bool open();
 	bool sendBuffer(const char* buffer);
 	std::string receiveBuffer();
 	void close();
-
-
 };
-

@@ -76,7 +76,7 @@ bool GameState::ProcessMessagePosition(string msg)
 {
 	string delimiter = ",";
 	int secu = 0;
-
+	/*
 	while (msg.find(delimiter) != -1)
 	{
 		secu++;
@@ -84,11 +84,11 @@ bool GameState::ProcessMessagePosition(string msg)
 
 		if (secu >= 100)
 			return false; // TODO => s'occuper des messages d'erreur (boucle infini detecter)
-	}
+	}*/
 	if (secu > 2)
 			return false; // TODO => s'occuper des messages d'erreur (Taille de message incorrect)
-
-	const char* message = msg.c_str();
+	msg = "S:" + msg;
+	const char* message =  msg.c_str();
 	char* chr = const_cast<char*>(message);
 
 	stateMachine_->GetGameManager()->GetServer()->sendClientData(playQueue_[1], chr);
@@ -103,12 +103,13 @@ bool GameState::ProcessMessageResult(string msg)
 
 	if (msg != "0" && msg != "1")
 		return false; // TODO => s'occuper des messages d'erreur (Valeur Incorrect)
-		
+	msg = "R:" + msg;
+
 	const char* message = msg.c_str();
 	char* chr = const_cast<char*>(message);
 
 	stateMachine_->GetGameManager()->GetServer()->sendClientData(playQueue_[0], chr);
-
+	PlayerTurn();
 
 	return true;
 }
